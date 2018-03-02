@@ -13,7 +13,6 @@ from matplotlib.colors import ListedColormap
 from math import fmod
 import seaborn as sns
 
-
 ############################################################################
 #                Data Generation
 ############################################################################
@@ -78,8 +77,10 @@ def rand_clown(n1=100, n2=100, sigma1=1, sigma2=2):
     return np.array(res[ind, :])
 
 
-def rand_checkers(n1=100, n2=100, n3=100, n4=100, sigma=0.1):
+def rand_checkers(n1=100, n2=100, n3=100, n4=100, sigma=0.1, random_state=None):
     """ Sample n1 and n2 points from a noisy checker"""
+    if random_state is not None:
+        np.random.seed(random_state)
     nb1 = n1 // 8
     nb2 = n2 // 8
     nb3 = n3 // 8
@@ -153,7 +154,7 @@ def plot_2d_simple(data, y=None):
 ############################################################################
 
 
-def frontiere(f, data, step=50):
+def frontiere(f, data, step=50, xlim=None, ylim=None):
     """ trace la frontiere pour la fonction de decision f"""
     xmin, xmax = data[:, 0].min() - 1., data[:, 0].max() + 1.
     ymin, ymax = data[:, 1].min() - 1., data[:, 1].max() + 1.
@@ -164,6 +165,10 @@ def frontiere(f, data, step=50):
 
     n_classes = np.unique(z).size
     cmap = ListedColormap(collist[:n_classes])
+    if xlim is not None:
+        plt.xlim(xlim)
+    if ylim is not None:
+        plt.ylim(ylim)
     plt.imshow(z, origin='lower', interpolation="nearest",
                extent=[xmin, xmax, ymin, ymax], cmap=cmap)
 
